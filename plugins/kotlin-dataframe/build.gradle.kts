@@ -2,6 +2,8 @@ plugins {
     kotlin("jvm")
 }
 
+val dataframeRuntimeClasspath by configurations.creating
+
 dependencies {
     embedded(project(":kotlin-dataframe-compiler-plugin.common")) { isTransitive = false }
     embedded(project(":kotlin-dataframe-compiler-plugin.backend")) { isTransitive = false }
@@ -20,6 +22,8 @@ dependencies {
     testApi(projectTests(":compiler:fir:analysis-tests"))
     testApi(projectTests(":js:js.tests"))
     testApi(project(":compiler:fir:plugin-utils"))
+    dataframeRuntimeClasspath(libs.dataframe.core.dev)
+    dataframeRuntimeClasspath(libs.dataframe.csv.dev)
 }
 
 sourceSets {
@@ -31,9 +35,13 @@ sourceSets {
 }
 
 projectTest(parallel = true, jUnitMode = JUnitMode.JUnit5) {
-    dependsOn(":dist")
+    dependsOn(":dist", dataframeRuntimeClasspath)
     workingDir = rootDir
     useJUnitPlatform()
+    val localKotlinDataFramePluginClasspath: FileCollection = dataframeRuntimeClasspath
+    doFirst {
+        systemProperty("kotlin.dataframe.plugin.test.classpath", localKotlinDataFramePluginClasspath.asPath)
+    }
 }
 
 publish {
