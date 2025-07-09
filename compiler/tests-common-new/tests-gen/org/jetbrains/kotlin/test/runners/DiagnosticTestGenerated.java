@@ -51019,6 +51019,12 @@ public class DiagnosticTestGenerated extends AbstractDiagnosticTest {
       }
 
       @Test
+      @TestMetadata("enumConstructor.kt")
+      public void testEnumConstructor() {
+        runTest("compiler/testData/diagnostics/testsWithStdLib/experimental/enumConstructor.kt");
+      }
+
+      @Test
       @TestMetadata("enumEntries.kt")
       public void testEnumEntries() {
         runTest("compiler/testData/diagnostics/testsWithStdLib/experimental/enumEntries.kt");
