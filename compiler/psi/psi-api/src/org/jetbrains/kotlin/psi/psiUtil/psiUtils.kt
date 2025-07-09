@@ -46,6 +46,15 @@ import kotlin.contracts.contract
 
 // ----------- Walking children/siblings/parents -------------------------------------------------------------------------------------------
 
+fun KtBinaryExpression.tryFlattenStringConcatenationChildren(): List<PsiElement>? {
+    return tryVisitFoldingStringConcatenation(fullFidelity = true)
+}
+
+fun KtBinaryExpression.tryGetStringConcatenationArguments(): List<KtStringTemplateExpression>? {
+    @Suppress("UNCHECKED_CAST")
+    return tryVisitFoldingStringConcatenation(fullFidelity = false) as? List<KtStringTemplateExpression>
+}
+
 /**
  * Emulates recursion using a stack to prevent StackOverflow exception on big string concatenation expressions like
  * `val x = "a0" + "a1" + ... + "a9999"` (it's relatively common in machine-generated code)
@@ -64,35 +73,47 @@ import kotlin.contracts.contract
  * ```
  *
  *
- * The method returns `'a', 'b', 'c'` if @param[collectAllDescendants] is `false` (default)
- * But returns `'a', 'b', '+'(1), 'c', '+'(0)` otherwise. This is used when full-fidelity tree structure is needed (see usages).
+ * The method returns `'a', 'b', 'c'` if [fullFidelity] is `false` (default)
+ * But returns `'a', 'b', '+'(1), 'c', '+'(0)` and hidden tokens in between (whitespaces or comments) otherwise.
+ * This is used when a full-fidelity tree structure is needed (see usages).
  */
-fun KtBinaryExpression.tryVisitFoldingStringConcatenation(collectAllDescendants: Boolean = false): List<KtExpression>? {
+private fun KtBinaryExpression.tryVisitFoldingStringConcatenation(fullFidelity: Boolean): List<PsiElement>? {
     // Optimization: don't allocate anything if the root expression doesn't match the string concatenation folding pattern
     if (operationToken != PLUS) return null
 
-    val input = mutableListOf<KtExpression?>().also { it.add(this) }
-    val output = ArrayDeque<KtExpression>()
+    val input = mutableListOf<PsiElement>(this)
+    val output = ArrayDeque<PsiElement>()
 
-    while (input.isNotEmpty()) {
-        when (val node = input.removeLast()) {
+    while (true) {
+        when (val node = input.removeLastOrNull() ?: break) {
             is KtBinaryExpression -> {
-                if (node.operationToken != PLUS) {
-                    return null
+                var child = node.firstChild
+                while (child != null) {
+                    input.add(child)
+                    child = child.nextSibling
                 }
-
-                if (collectAllDescendants) {
+            }
+            is KtStringTemplateExpression -> {
+                output.addFirst(node)
+            }
+            is PsiWhiteSpace,
+            is PsiComment
+                -> {
+                if (fullFidelity) {
                     output.addFirst(node)
                 }
-                input.add(node.left)
-                input.add(node.right)
             }
-            else -> {
-                if (node !is KtStringTemplateExpression) {
+            is KtOperationReferenceExpression -> {
+                if (node.operationSignTokenType != PLUS) {
                     return null
                 }
 
-                output.addFirst(node)
+                if (fullFidelity) {
+                    output.addFirst(node)
+                }
+            }
+            else -> {
+                return null
             }
         }
     }
