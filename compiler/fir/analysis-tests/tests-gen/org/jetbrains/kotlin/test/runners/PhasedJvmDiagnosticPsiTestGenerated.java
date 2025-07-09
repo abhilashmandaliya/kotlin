@@ -49044,6 +49044,12 @@ public class PhasedJvmDiagnosticPsiTestGenerated extends AbstractPhasedJvmDiagno
       }
 
       @Test
+      @TestMetadata("enumConstructorStrictCheck.kt")
+      public void testEnumConstructorStrictCheck() {
+        runTest("compiler/testData/diagnostics/testsWithStdLib/experimental/enumConstructorStrictCheck.kt");
+      }
+
+      @Test
       @TestMetadata("enumEntries.kt")
       public void testEnumEntries() {
         runTest("compiler/testData/diagnostics/testsWithStdLib/experimental/enumEntries.kt");
