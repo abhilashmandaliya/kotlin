@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.generators.util.TestGeneratorUtil
 import org.jetbrains.kotlin.incremental.*
 import org.jetbrains.kotlin.js.test.fir.*
 import org.jetbrains.kotlin.js.test.ir.*
+import org.jetbrains.kotlin.js.test.klib.AbstractCustomJsCompilerFirstPhaseTest
 import org.jetbrains.kotlin.js.testOld.klib.AbstractClassicJsKlibEvolutionTest
 import org.jetbrains.kotlin.js.testOld.klib.AbstractFirJsKlibEvolutionTest
 import org.jetbrains.kotlin.test.TargetBackend
@@ -273,6 +274,11 @@ fun main(args: Array<String>) {
 
             testClass<AbstractJsIrDeserializationCodegenBoxWithInlinedFunInKlibTest> {
                 model("box", excludeDirs = jvmOnlyBoxTests + k1BoxTestDir + irInterpreterTests)
+                model("boxInline")
+            }
+
+            testClass<AbstractCustomJsCompilerFirstPhaseTest> {
+                model("box", excludeDirs = jvmOnlyBoxTests)
                 model("boxInline")
             }
         }
