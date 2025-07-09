@@ -187,7 +187,6 @@ abstract class SwiftExportExtension @Inject constructor(
             when (dep) {
                 is Project -> SwiftExportedDependency.Project(objectFactory, dep.path)
                 is ProjectDependency -> SwiftExportedDependency.Project(objectFactory, dep.path)
-                is ModuleDependency -> SwiftExportedDependency.External(objectFactory, dep.moduleVersionIdentifier)
                 is Dependency -> SwiftExportedDependency.External(objectFactory, dep.moduleVersionIdentifier)
                 else -> SwiftExportedDependency.External(objectFactory, dependencyHandler.create(dep).moduleVersionIdentifier)
             }.also {
