@@ -22,6 +22,7 @@ internal val customJsCompilerSettings: CustomWebCompilerSettings by lazy {
         artifactsDirPropertyName = "kotlin.internal.js.test.compat.customCompilerArtifactsDir",
         versionPropertyName = "kotlin.internal.js.test.compat.customCompilerVersion",
         stdlibArtifactName = "kotlin-stdlib-js",
+        kotlinTestArtifactName = "kotlin-test-js",
     )
 }
 
@@ -32,6 +33,7 @@ internal val customJsCompilerSettings: CustomWebCompilerSettings by lazy {
 internal interface CustomWebCompilerSettings {
     val isAvailable: Boolean
     val stdlib: File
+    val kotlinTest: File
     val customCompiler: CustomWebCompiler
 }
 
@@ -39,6 +41,7 @@ private fun createCustomWebCompilerSettings(
     artifactsDirPropertyName: String,
     versionPropertyName: String,
     stdlibArtifactName: String,
+    kotlinTestArtifactName: String,
 ): CustomWebCompilerSettings = object : CustomWebCompilerSettings {
     private val artifacts: CustomWebCompilerArtifacts by lazy {
         CustomWebCompilerArtifacts.create(artifactsDirPropertyName, versionPropertyName)
@@ -46,6 +49,7 @@ private fun createCustomWebCompilerSettings(
 
     override val isAvailable get() = artifacts.areArtifactsAvailable
     override val stdlib: File by lazy { artifacts.resolve(stdlibArtifactName, extension = "klib") }
+    override val kotlinTest: File by lazy { artifacts.resolve(kotlinTestArtifactName, extension = "klib") }
 
     override val customCompiler: CustomWebCompiler by lazy {
         CustomWebCompiler(
