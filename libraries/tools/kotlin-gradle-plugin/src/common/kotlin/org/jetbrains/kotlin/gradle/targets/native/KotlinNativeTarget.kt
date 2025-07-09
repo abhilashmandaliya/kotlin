@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.gradle.plugin.sources.internal
 import org.jetbrains.kotlin.gradle.targets.metadata.isNativeSourceSet
 import org.jetbrains.kotlin.gradle.targets.native.*
 import org.jetbrains.kotlin.gradle.utils.dashSeparatedName
+import org.jetbrains.kotlin.gradle.utils.getValue
 import org.jetbrains.kotlin.gradle.utils.klibModuleName
 import org.jetbrains.kotlin.gradle.utils.newInstance
 import org.jetbrains.kotlin.konan.target.HostManager
@@ -95,8 +96,9 @@ abstract class KotlinNativeTarget @Inject constructor(
     override val artifactsTaskName: String
         get() = disambiguateName("binaries")
 
-    override val publishable: Boolean
-        get() = enabledOnCurrentHostForKlibCompilation
+    override val publishable: Boolean by project.provider {
+        crossCompilationOnCurrentHostSupported.get()
+    }
 
     override val compilerOptions: KotlinNativeCompilerOptions = project.objects
         .newInstance<KotlinNativeCompilerOptionsDefault>()
@@ -108,7 +110,7 @@ abstract class KotlinNativeTarget @Inject constructor(
             )
         }
 
-    internal val compilationSupported: Provider<Boolean> = project.provider {
+    internal val crossCompilationOnCurrentHostSupported: Provider<Boolean> = project.provider {
         val crossCompilationEnabled = project.kotlinPropertiesProvider.enableKlibsCrossCompilation
         val isSupportedHost = hostManager.isEnabled(konanTarget)
 
@@ -117,7 +119,7 @@ abstract class KotlinNativeTarget @Inject constructor(
 
         // Unsupported hosts require cross-compilation enabled and no cinterops
         crossCompilationEnabled && binaries.toList().all { binary ->
-            binary.compilation.compilationSupported.get()
+            binary.compilation.crossCompilationOnCurrentHostSupported.get()
         }
     }
 

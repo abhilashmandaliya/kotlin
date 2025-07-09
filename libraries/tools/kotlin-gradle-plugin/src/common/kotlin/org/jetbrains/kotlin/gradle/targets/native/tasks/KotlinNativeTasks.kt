@@ -45,8 +45,10 @@ import org.jetbrains.kotlin.gradle.plugin.PropertiesProvider.Companion.kotlinPro
 import org.jetbrains.kotlin.gradle.plugin.cocoapods.asValidFrameworkName
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.useXcodeMessageStyle
+import org.jetbrains.kotlin.gradle.plugin.nativeCompilation
 import org.jetbrains.kotlin.gradle.plugin.statistics.NativeCompilerOptionMetrics
 import org.jetbrains.kotlin.gradle.plugin.statistics.UsesBuildFusService
+import org.jetbrains.kotlin.gradle.plugin.tcs
 import org.jetbrains.kotlin.gradle.report.*
 import org.jetbrains.kotlin.gradle.targets.native.KonanPropertiesBuildService
 import org.jetbrains.kotlin.gradle.targets.native.UsesKonanPropertiesBuildService
@@ -163,33 +165,20 @@ abstract class AbstractKotlinNativeCompile<
 
     @get:Internal
     internal val konanTarget by project.provider {
-        when (val compilation = compilation) {
-            is KotlinCompilationInfo.TCS -> (compilation.compilation as AbstractKotlinNativeCompilation).konanTarget
-        }
+        compilation.nativeCompilation.konanTarget
     }
 
     @get:Internal
     internal val konanDistribution = project.nativeProperties.actualNativeHomeDirectory
 
-    @get:Internal
-    internal val enabledOnCurrentHostForKlibCompilationProperty: Property<Boolean> = project.objects.property<Boolean>().convention(
-        // For KT-66452 we need to get rid of invocation of 'Task.project'.
-        // That is why we moved setting this property to task registration
-        // and added convention for backwards compatibility.
-        project.provider {
-            konanTarget.enabledOnCurrentHostForKlibCompilation(project.kotlinPropertiesProvider)
-        }
-    )
-
     @get:Classpath
-    override val libraries: ConfigurableFileCollection = objectFactory.fileCollection().from(
-        {
-            // Avoid resolving these dependencies during task graph construction when we can't build the target:
-            if (enabledOnCurrentHostForKlibCompilationProperty.get())
-                objectFactory.fileCollection().from({ compilation.compileDependencyFiles })
-            else objectFactory.fileCollection()
+    override val libraries: ConfigurableFileCollection by project.provider {
+        if (compilation.nativeCompilation.crossCompilationOnCurrentHostSupported.get()) {
+            objectFactory.fileCollection().from({ compilation.compileDependencyFiles })
+        } else {
+            objectFactory.fileCollection()
         }
-    )
+    }
 
     @get:Classpath
     internal val friendModule: FileCollection = project.files({ compilation.friendPaths })

@@ -107,3 +107,6 @@ internal fun KotlinCompilationInfo(compilation: KotlinCompilation<*>): KotlinCom
 
 internal val KotlinCompilationInfo.tcs: KotlinCompilationInfo.TCS
     get() = this as KotlinCompilationInfo.TCS
+
+internal val KotlinCompilationInfo.nativeCompilation: AbstractKotlinNativeCompilation
+    get() = tcs.compilation as AbstractKotlinNativeCompilation
