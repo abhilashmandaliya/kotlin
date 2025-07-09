@@ -23,12 +23,14 @@ import org.jetbrains.kotlin.fir.declarations.utils.hasExplicitBackingField
 import org.jetbrains.kotlin.fir.declarations.utils.isConst
 import org.jetbrains.kotlin.fir.declarations.utils.isInline
 import org.jetbrains.kotlin.fir.declarations.utils.isLocal
+import org.jetbrains.kotlin.fir.declarations.utils.isScriptTopLevelDeclaration
 import org.jetbrains.kotlin.fir.diagnostics.ConeSimpleDiagnostic
 import org.jetbrains.kotlin.fir.diagnostics.DiagnosticKind
 import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.expressions.impl.FirSingleExpressionBlock
 import org.jetbrains.kotlin.fir.extensions.extensionService
 import org.jetbrains.kotlin.fir.extensions.replSnippetResolveExtensions
+import org.jetbrains.kotlin.fir.extensions.scriptResolutionHacksExtension
 import org.jetbrains.kotlin.fir.references.FirResolvedErrorReference
 import org.jetbrains.kotlin.fir.references.FirResolvedNamedReference
 import org.jetbrains.kotlin.fir.resolve.*
@@ -195,7 +197,9 @@ open class FirDeclarationsResolveTransformer(
                     doTransformTypeParameters(property)
                 }
 
-                context.forPropertyInitializer {
+                val skipCleanup = property.isScriptTopLevelDeclaration == true &&
+                        session.extensionService.scriptResolutionHacksExtension.any { it.skipTowerDataCleanupForTopLevelInitializers }
+                context.forPropertyInitializer(skipCleanup) {
                     if (!initializerIsAlreadyResolved) {
                         val resolutionMode = withExpectedType(property.returnTypeRef)
                         property
@@ -373,7 +377,9 @@ open class FirDeclarationsResolveTransformer(
             if (property.isLocal) {
                 transformDelegateExpression(delegateContainer)
             } else {
-                context.forPropertyInitializer {
+                val skipCleanup = property.isScriptTopLevelDeclaration == true &&
+                        session.extensionService.scriptResolutionHacksExtension.any { it.skipTowerDataCleanupForTopLevelInitializers }
+                context.forPropertyInitializer(skipCleanup) {
                     transformDelegateExpression(delegateContainer)
                 }
             }

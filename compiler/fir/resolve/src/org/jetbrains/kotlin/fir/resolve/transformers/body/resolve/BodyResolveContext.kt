@@ -14,10 +14,12 @@ import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.declarations.impl.FirDefaultPropertyAccessor
 import org.jetbrains.kotlin.fir.declarations.utils.isCompanion
 import org.jetbrains.kotlin.fir.declarations.utils.isInner
+import org.jetbrains.kotlin.fir.declarations.utils.isScriptTopLevelDeclaration
 import org.jetbrains.kotlin.fir.expressions.FirCallableReferenceAccess
 import org.jetbrains.kotlin.fir.expressions.FirWhenExpression
 import org.jetbrains.kotlin.fir.extensions.extensionService
 import org.jetbrains.kotlin.fir.extensions.replSnippetResolveExtensions
+import org.jetbrains.kotlin.fir.extensions.scriptResolutionHacksExtension
 import org.jetbrains.kotlin.fir.languageVersionSettings
 import org.jetbrains.kotlin.fir.resolve.*
 import org.jetbrains.kotlin.fir.resolve.calls.*
@@ -185,6 +187,16 @@ class BodyResolveContext(
             l()
         } finally {
             replaceTowerDataContext(initialContext)
+        }
+    }
+
+    @PrivateForInline
+    inline fun <R> withConditionalTowerDataCleanup(skipCleanup: Boolean, l: () -> R): R {
+        val initialContext = towerDataContext
+        return try {
+            l()
+        } finally {
+            if (!skipCleanup) replaceTowerDataContext(initialContext)
         }
     }
 
@@ -884,7 +896,9 @@ class BodyResolveContext(
         session: FirSession,
         f: () -> T
     ): T {
-        return withTowerDataCleanup {
+        val skipCleanup = anonymousInitializer.isScriptTopLevelDeclaration == true &&
+                session.extensionService.scriptResolutionHacksExtension.any { it.skipTowerDataCleanupForTopLevelInitializers }
+        return withConditionalTowerDataCleanup(skipCleanup) {
             getPrimaryConstructorPureParametersScope()?.let { addLocalScope(it) }
             addLocalScope(FirLocalScope(session))
             addAnonymousInitializer(anonymousInitializer)
@@ -972,8 +986,8 @@ class BodyResolveContext(
     }
 
     @OptIn(PrivateForInline::class)
-    inline fun <T> forPropertyInitializer(f: () -> T): T {
-        return withTowerDataCleanup {
+    inline fun <T> forPropertyInitializer(skipCleanup: Boolean, f: () -> T): T {
+        return withConditionalTowerDataCleanup(skipCleanup) {
             getPrimaryConstructorPureParametersScope()?.let { addLocalScope(it) }
             f()
         }
