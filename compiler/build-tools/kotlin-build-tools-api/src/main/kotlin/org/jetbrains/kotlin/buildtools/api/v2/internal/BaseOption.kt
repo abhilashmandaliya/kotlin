@@ -5,6 +5,9 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.internal
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
+
+@ExperimentalBuildToolsApi
 public abstract class BaseOption<V>(public val id: String) {
     override fun toString(): String = id
 }

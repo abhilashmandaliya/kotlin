@@ -5,22 +5,7 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.js
 
-import org.jetbrains.kotlin.buildtools.api.v2.js.operations.WasmBinaryLinkingOperation
-import org.jetbrains.kotlin.buildtools.api.v2.js.operations.WasmKlibCompilationOperation
-import java.nio.file.Path
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 
-public interface WasmPlatformToolchain {
-    /**
-     * Creates a self-contained operation descriptor to be executed by [org.jetbrains.kotlin.buildtools.api.v2.KotlinToolchain.executeOperation]
-     *
-     * Basically, converts sources into klib files.
-     */
-    public fun createKlibCompilationOperation(kotlinSources: List<Path>, destinationDirectory: Path): WasmKlibCompilationOperation
-
-    /**
-     * Creates a self-contained operation descriptor to be executed by [org.jetbrains.kotlin.buildtools.api.v2.KotlinToolchain.executeOperation]
-     *
-     * Basically, converts a set of klib files into binaries, like a set of .wasm files, .js files (for wasm-js), source maps, etc...
-     */
-    public fun createBinaryLinkingOperation(klibPaths: List<Path>, destinationDirectory: Path): WasmBinaryLinkingOperation
-}
+@ExperimentalBuildToolsApi
+public interface WasmPlatformToolchain

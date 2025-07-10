@@ -46,7 +46,7 @@ internal object GlobalCompiledProjectsCache {
         return if (icSourceTracking) {
             AutoTrackedScenarioModuleImpl(module, initialOutputs)
         } else {
-            ExternallyTrackedScenarioModuleImpl(module, initialOutputs, projectSpec)
+            ExternallyTrackedScenarioModuleImpl(module, initialOutputs)
         }
     }
 
@@ -75,7 +75,7 @@ internal object GlobalCompiledProjectsCache {
         return if (icSourceTracking) {
             AutoTrackedScenarioModuleImpl(module, initialOutputs)
         } else {
-            ExternallyTrackedScenarioModuleImpl(module, initialOutputs, projectSpec)
+            ExternallyTrackedScenarioModuleImpl(module, initialOutputs)
         }
     }
 }

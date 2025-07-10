@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.KotlinLogger
 import org.jetbrains.kotlin.buildtools.api.ProjectId
 import org.jetbrains.kotlin.buildtools.api.v2.js.JsPlatformToolchain
@@ -12,6 +13,7 @@ import org.jetbrains.kotlin.buildtools.api.v2.js.WasmPlatformToolchain
 import org.jetbrains.kotlin.buildtools.api.v2.jvm.JvmPlatformToolchain
 import org.jetbrains.kotlin.buildtools.api.v2.native.NativePlatformToolchain
 
+@ExperimentalBuildToolsApi
 public interface KotlinToolchain {
     public val jvm: JvmPlatformToolchain
     public val js: JsPlatformToolchain

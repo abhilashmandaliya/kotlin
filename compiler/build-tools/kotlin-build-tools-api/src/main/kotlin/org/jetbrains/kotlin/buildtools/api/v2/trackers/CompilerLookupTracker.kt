@@ -5,6 +5,9 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.trackers
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
+
+@ExperimentalBuildToolsApi
 public interface CompilerLookupTracker {
     public class Position(public val line: Int, public val column: Int)
 

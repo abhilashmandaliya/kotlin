@@ -230,7 +230,7 @@ internal object CompilationServiceImpl : CompilationService {
         }
     }
 
-    internal fun checkJvmFirRequirements(
+    private fun checkJvmFirRequirements(
         arguments: List<String>,
     ): Boolean {
         val languageVersion: LanguageVersion = arguments.find { it.startsWith("-language-version") }

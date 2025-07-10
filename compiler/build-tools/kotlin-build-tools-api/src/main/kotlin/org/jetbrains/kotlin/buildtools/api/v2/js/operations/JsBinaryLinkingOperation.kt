@@ -5,9 +5,8 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.js.operations
 
-import org.jetbrains.kotlin.buildtools.api.v2.js.arguments.JsLinkerArguments
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.v2.BuildOperation
 
-public interface JsBinaryLinkingOperation : BuildOperation<Unit> {
-    public val linkerArguments: JsLinkerArguments
-}
+@ExperimentalBuildToolsApi
+public interface JsBinaryLinkingOperation : BuildOperation<Unit>

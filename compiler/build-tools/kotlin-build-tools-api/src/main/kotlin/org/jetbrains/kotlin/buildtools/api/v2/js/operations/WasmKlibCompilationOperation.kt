@@ -5,9 +5,8 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.js.operations
 
-import org.jetbrains.kotlin.buildtools.api.v2.js.arguments.WasmCompilerArguments
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.v2.BuildOperation
 
-public interface WasmKlibCompilationOperation : BuildOperation<Unit> {
-    public val compilerArguments: WasmCompilerArguments
-}
+@ExperimentalBuildToolsApi
+public interface WasmKlibCompilationOperation : BuildOperation<Unit>

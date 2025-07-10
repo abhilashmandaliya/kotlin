@@ -5,4 +5,7 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
+
+@ExperimentalBuildToolsApi
 public interface ExecutionPolicy

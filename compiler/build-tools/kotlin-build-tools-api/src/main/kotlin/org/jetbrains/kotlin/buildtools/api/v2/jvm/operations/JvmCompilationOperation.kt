@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.buildtools.api.v2.jvm.operations
 
 import org.jetbrains.kotlin.buildtools.api.CompilationResult
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.v2.BuildOperation
 import org.jetbrains.kotlin.buildtools.api.v2.JvmCompilerArguments
 import org.jetbrains.kotlin.buildtools.api.v2.internal.BaseOption
@@ -14,6 +15,7 @@ import org.jetbrains.kotlin.buildtools.api.v2.jvm.JvmSnapshotBasedIncrementalCom
 import org.jetbrains.kotlin.buildtools.api.v2.trackers.CompilerLookupTracker
 import org.jetbrains.kotlin.buildtools.api.v2.trackers.SourceToOutputsTracker
 
+@ExperimentalBuildToolsApi
 public interface JvmCompilationOperation : BuildOperation<CompilationResult> {
     public class Option<V>(id: String) : BaseOption<V>(id)
 

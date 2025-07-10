@@ -5,9 +5,8 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.native.operations
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.v2.BuildOperation
-import org.jetbrains.kotlin.buildtools.api.v2.native.arguments.NativeCompilerArguments
 
-public interface NativeKlibCompilationOperation : BuildOperation<Unit> {
-    public val compilerArguments: NativeCompilerArguments
-}
+@ExperimentalBuildToolsApi
+public interface NativeKlibCompilationOperation : BuildOperation<Unit>

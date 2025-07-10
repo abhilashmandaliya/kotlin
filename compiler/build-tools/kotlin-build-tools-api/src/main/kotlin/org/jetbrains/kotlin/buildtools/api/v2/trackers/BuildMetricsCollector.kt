@@ -5,6 +5,9 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.trackers
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
+
+@ExperimentalBuildToolsApi
 public interface BuildMetricsCollector {
     public enum class ValueType {
         BYTES,

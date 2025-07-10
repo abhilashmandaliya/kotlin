@@ -17,10 +17,7 @@ import org.jetbrains.kotlin.buildtools.api.v2.js.JsPlatformToolchain
 import org.jetbrains.kotlin.buildtools.api.v2.js.WasmPlatformToolchain
 import org.jetbrains.kotlin.buildtools.api.v2.jvm.JvmPlatformToolchain
 import org.jetbrains.kotlin.buildtools.api.v2.native.NativePlatformToolchain
-import org.jetbrains.kotlin.buildtools.internal.v2.js.JsPlatformToolchainImpl
-import org.jetbrains.kotlin.buildtools.internal.v2.js.WasmPlatformToolchainImpl
 import org.jetbrains.kotlin.buildtools.internal.v2.jvm.JvmPlatformToolchainImpl
-import org.jetbrains.kotlin.buildtools.internal.v2.native.NativePlatformToolchainImpl
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.modules.CoreJrtFileSystem
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
@@ -30,10 +27,11 @@ import java.util.concurrent.ConcurrentHashMap
 class KotlinToolchainImpl(
     private val buildIdToSessionFlagFile: MutableMap<ProjectId, File> = ConcurrentHashMap(),
     override val jvm: JvmPlatformToolchain = JvmPlatformToolchainImpl(buildIdToSessionFlagFile),
-    override val js: JsPlatformToolchain = JsPlatformToolchainImpl(),
-    override val native: NativePlatformToolchain = NativePlatformToolchainImpl(),
-    override val wasm: WasmPlatformToolchain = WasmPlatformToolchainImpl(),
 ) : KotlinToolchain {
+
+    override val js: JsPlatformToolchain get() = TODO("Not implemented yet. Only JVM compilation is supported for now.")
+    override val native: NativePlatformToolchain get() = TODO("Not implemented yet. Only JVM compilation is supported for now.")
+    override val wasm: WasmPlatformToolchain get() = TODO("Not implemented yet. Only JVM compilation is supported for now.")
 
     override fun createInProcessExecutionPolicy(): ExecutionPolicy = InProcessExecutionPolicy
 

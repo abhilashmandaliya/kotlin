@@ -5,9 +5,8 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.js.operations
 
-import org.jetbrains.kotlin.buildtools.api.v2.js.arguments.WasmLinkerArguments
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.v2.BuildOperation
 
-public interface WasmBinaryLinkingOperation : BuildOperation<Unit> {
-    public val linkerArguments: WasmLinkerArguments
-}
+@ExperimentalBuildToolsApi
+public interface WasmBinaryLinkingOperation : BuildOperation<Unit>

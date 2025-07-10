@@ -5,8 +5,10 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.trackers
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import java.nio.file.Path
 
+@ExperimentalBuildToolsApi
 public interface SourceToOutputsTracker {
     public fun recordMapping(filePath: Path, outputs: List<Path>)
 }

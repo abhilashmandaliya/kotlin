@@ -5,9 +5,8 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.native.operations
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.v2.BuildOperation
-import org.jetbrains.kotlin.buildtools.api.v2.native.arguments.NativeLinkerArguments
 
-public interface NativeBinaryLinkingOperation : BuildOperation<Unit> {
-    public val linkerArguments: NativeLinkerArguments
-}
+@ExperimentalBuildToolsApi
+public interface NativeBinaryLinkingOperation : BuildOperation<Unit>

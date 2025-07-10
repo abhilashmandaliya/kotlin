@@ -5,10 +5,12 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.jvm
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.v2.jvm.operations.JvmClasspathSnapshottingOperation
 import org.jetbrains.kotlin.buildtools.api.v2.jvm.operations.JvmCompilationOperation
 import java.nio.file.Path
 
+@ExperimentalBuildToolsApi
 public interface JvmPlatformToolchain {
     /**
      * Creates a self-contained operation descriptor to be executed by [org.jetbrains.kotlin.buildtools.api.v2.KotlinToolchain.executeOperation]

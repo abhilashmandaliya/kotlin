@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.buildtools.api.jvm.ClasspathEntrySnapshot
 import org.jetbrains.kotlin.buildtools.api.v2.BuildOperation
 import org.jetbrains.kotlin.buildtools.api.v2.internal.BaseOption
 
+@ExperimentalBuildToolsApi
 public interface JvmClasspathSnapshottingOperation : BuildOperation<ClasspathEntrySnapshot> {
     public class Option<V>(id: String) : BaseOption<V>(id)
 

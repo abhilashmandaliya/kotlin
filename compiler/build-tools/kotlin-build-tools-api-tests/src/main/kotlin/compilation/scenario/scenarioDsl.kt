@@ -6,25 +6,18 @@
 package org.jetbrains.kotlin.buildtools.api.tests.compilation.scenario
 
 import org.jetbrains.kotlin.buildtools.api.CompilationResult
-import org.jetbrains.kotlin.buildtools.api.CompilerExecutionStrategyConfiguration
 import org.jetbrains.kotlin.buildtools.api.SourcesChanges
-import org.jetbrains.kotlin.buildtools.api.jvm.IncrementalJvmCompilationConfiguration
-import org.jetbrains.kotlin.buildtools.api.jvm.JvmCompilationConfiguration
 import org.jetbrains.kotlin.buildtools.api.tests.compilation.BaseCompilationTest
-import org.jetbrains.kotlin.buildtools.api.tests.compilation.model.CompilationOutcome
 import org.jetbrains.kotlin.buildtools.api.tests.compilation.model.*
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.*
+import kotlin.io.path.deleteExisting
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
 internal abstract class BaseScenarioModule(
     internal val module: Module,
     internal val outputs: MutableSet<String>,
-//    private val projectSpec: ProjectSpec,
-//    private val compilationOptionsModifier: ((JvmCompilationConfiguration) -> Unit)?,
-//    private val incrementalCompilationOptionsModifier: ((IncrementalJvmCompilationConfiguration<*>) -> Unit)?,
 ) : ScenarioModule {
     override fun changeFile(
         fileName: String,
@@ -70,8 +63,6 @@ internal abstract class BaseScenarioModule(
         module.compileIncrementally(
             getSourcesChanges(),
             forceOutput,
-//            compilationConfigAction = { compilationOptionsModifier?.invoke(it) },
-//            incrementalCompilationConfigAction = { incrementalCompilationOptionsModifier?.invoke(it) },
             assertions = {
                 assertions(this, module, this@BaseScenarioModule)
             })
@@ -91,7 +82,6 @@ internal abstract class BaseScenarioModule(
 internal class ExternallyTrackedScenarioModuleImpl(
     module: Module,
     outputs: MutableSet<String>,
-    projectSpec: ProjectSpec,
 ) : BaseScenarioModule(module, outputs) {
     private var sourcesChanges = SourcesChanges.Known(emptyList(), emptyList())
 
@@ -149,7 +139,6 @@ internal class ExternallyTrackedScenarioModuleImpl(
 internal class AutoTrackedScenarioModuleImpl(
     module: Module,
     outputs: MutableSet<String>,
-
 ) : BaseScenarioModule(module, outputs) {
     override fun getSourcesChanges() = SourcesChanges.ToBeCalculated
 }

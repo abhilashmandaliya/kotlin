@@ -5,10 +5,12 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.ProjectId
 import org.jetbrains.kotlin.buildtools.api.v2.internal.BaseOption
 import org.jetbrains.kotlin.buildtools.api.v2.trackers.BuildMetricsCollector
 
+@ExperimentalBuildToolsApi
 public interface BuildOperation<R> {
     public class Option<V> internal constructor(id: String) : BaseOption<V>(id)
 

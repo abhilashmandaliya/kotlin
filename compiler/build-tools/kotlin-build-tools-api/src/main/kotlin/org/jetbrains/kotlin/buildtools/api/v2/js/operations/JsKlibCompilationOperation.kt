@@ -5,9 +5,8 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.js.operations
 
-import org.jetbrains.kotlin.buildtools.api.v2.js.arguments.JsCompilerArguments
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.v2.BuildOperation
 
-public interface JsKlibCompilationOperation : BuildOperation<Unit> {
-    public val compilerArguments: JsCompilerArguments
-}
+@ExperimentalBuildToolsApi
+public interface JsKlibCompilationOperation : BuildOperation<Unit>

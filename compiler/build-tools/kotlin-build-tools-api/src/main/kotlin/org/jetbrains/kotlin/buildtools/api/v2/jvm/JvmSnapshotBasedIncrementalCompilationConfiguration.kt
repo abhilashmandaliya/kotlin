@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.buildtools.api.v2.jvm
 
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.buildtools.api.SourcesChanges
 import org.jetbrains.kotlin.buildtools.api.v2.internal.BaseOption
 
@@ -15,9 +16,10 @@ public interface JvmIncrementalCompilationConfiguration
 /**
  * @property workingDirectory the working directory for the IC operation to store internal objects.
  * @property sourcesChanges changes in the source files, which can be unknown, to-be-calculated, or known.
- * @property dependenciesSnapshotFiles a list of paths to dependency snapshot files produced by [JvmPlatformToolchain.calculateClasspathSnapshot].
+ * @property dependenciesSnapshotFiles a list of paths to dependency snapshot files produced by [org.jetbrains.kotlin.buildtools.api.v2.jvm.operations.JvmClasspathSnapshottingOperation].
  * @property options an option set produced by [org.jetbrains.kotlin.buildtools.api.v2.jvm.operations.JvmCompilationOperation.createSnapshotBasedIcOptions]
  */
+@ExperimentalBuildToolsApi
 public class JvmSnapshotBasedIncrementalCompilationConfiguration(
     public val workingDirectory: Path,
     public val sourcesChanges: SourcesChanges,
@@ -26,6 +28,7 @@ public class JvmSnapshotBasedIncrementalCompilationConfiguration(
     public val options: JvmSnapshotBasedIncrementalCompilationOptions,
 ) : JvmIncrementalCompilationConfiguration
 
+@ExperimentalBuildToolsApi
 public interface JvmSnapshotBasedIncrementalCompilationOptions {
     public class Option<V> internal constructor(id: String) : BaseOption<V>(id)
 
