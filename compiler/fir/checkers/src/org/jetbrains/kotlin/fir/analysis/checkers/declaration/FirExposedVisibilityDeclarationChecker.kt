@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.fir.declarations.utils.effectiveVisibility
 import org.jetbrains.kotlin.fir.declarations.utils.expandedConeType
 import org.jetbrains.kotlin.fir.declarations.utils.fromPrimaryConstructor
 import org.jetbrains.kotlin.fir.declarations.utils.isFromSealedClass
+import org.jetbrains.kotlin.fir.declarations.utils.isScriptTopLevelDeclaration
 import org.jetbrains.kotlin.fir.declarations.utils.visibility
 import org.jetbrains.kotlin.fir.isEnabled
 import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
@@ -192,7 +193,10 @@ object FirExposedVisibilityDeclarationChecker : FirBasicDeclarationChecker(MppCh
         if (declaration.source?.kind == KtFakeSourceElementKind.EnumGeneratedDeclaration) return
         val propertyVisibility = declaration.effectiveVisibility
 
-        if (propertyVisibility == EffectiveVisibility.Local || declaration.origin == FirDeclarationOrigin.ScriptCustomization.ResultProperty) {
+        if (propertyVisibility == EffectiveVisibility.Local ||
+            declaration.origin == FirDeclarationOrigin.ScriptCustomization.ResultProperty ||
+            declaration.isScriptTopLevelDeclaration == true // need to exclude script properties due to the temporary fix for KT-78724
+        ) {
             return
         }
         declaration.returnTypeRef.coneType
