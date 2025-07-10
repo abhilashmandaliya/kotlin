@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.fir.backend.utils.*
 import org.jetbrains.kotlin.fir.backend.utils.convertWithOffsets
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.declarations.utils.SCRIPT_RECEIVER_NAME_PREFIX
+import org.jetbrains.kotlin.fir.declarations.utils.isScriptTopLevelDeclaration
 import org.jetbrains.kotlin.fir.declarations.utils.isSealed
 import org.jetbrains.kotlin.fir.declarations.utils.isSynthetic
 import org.jetbrains.kotlin.fir.declarations.utils.visibility
@@ -59,6 +60,7 @@ import org.jetbrains.kotlin.ir.types.impl.IrErrorTypeImpl
 import org.jetbrains.kotlin.ir.util.constructors
 import org.jetbrains.kotlin.ir.util.defaultConstructor
 import org.jetbrains.kotlin.ir.util.defaultValueForType
+import org.jetbrains.kotlin.ir.util.render
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
@@ -900,6 +902,7 @@ class Fir2IrVisitor(
         }
     }
 
+    @OptIn(UnsafeDuringIrConstructionAPI::class)
     private fun generateThisReceiverAccessForCallable(
         thisReceiverExpression: FirThisReceiverExpression,
         firCallableSymbol: FirCallableSymbol<*>
@@ -916,6 +919,9 @@ class Fir2IrVisitor(
             is FirPropertySymbol ->
                 when (val property = declarationStorage.getIrPropertySymbol(firCallableSymbol)) {
                     is IrPropertySymbol -> conversionScope.parentAccessorOfPropertyFromStack(property)
+                        ?: if (firCallableSymbol.fir.isScriptTopLevelDeclaration != true) {
+                            error("Accessor of property ${property.owner.render()} not found on parent stack")
+                        } else null
                     is IrLocalDelegatedPropertySymbol -> conversionScope.parentAccessorOfDelegatedPropertyFromStack(property)
                     else -> null
                 }
