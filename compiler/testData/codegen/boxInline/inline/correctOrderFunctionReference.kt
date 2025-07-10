@@ -3,8 +3,8 @@
  * that can be found in the LICENSE file.
  */
 // WITH_STDLIB
-
-import kotlin.test.*
+// NO_CHECK_LAMBDA_INLINING
+// FILE: lib.kt
 
 class Foo(val a: String) {
 
@@ -27,6 +27,7 @@ fun create2(a: String, f: () -> String): Foo {
     return Foo(a)
 }
 
+// FILE: main.kt
 fun box(): String {
     val result = test(create("A").a, create("B")::a, create("C")::test, create2("E", create("D")::test)::test, create("F").a)
     if (effects != "ABCDEF") return "fail 1: $effects"

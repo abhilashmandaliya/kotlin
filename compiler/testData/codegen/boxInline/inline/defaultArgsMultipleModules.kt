@@ -1,12 +1,10 @@
 // WITH_STDLIB
-// MODULE: lib
 // FILE: lib.kt
 
 package a
 
 inline fun foo(x: Int, y: Int = 117) = x + y
 
-// MODULE: main(lib)
 // FILE: main.kt
 
 import a.*

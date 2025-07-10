@@ -3,20 +3,19 @@
  * that can be found in the LICENSE file.
  */
 // WITH_STDLIB
+// FILE: lib.kt
 
+class Z<T>(val x: T)
+
+inline fun<T, R> foo(x: T, f: (T) -> R): R {
+    return f(x)
+}
+
+// FILE: main.kt
 import kotlin.test.*
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun foo(i1: Int, j1: Int): Int {
-    return i1 + j1
-}
-
-fun bar(i: Int, j: Int): Int {
-    return i + foo(i, j)
-}
-
 fun box(): String {
-    assertEquals(84, bar(41, 2))
+    val arr = Array(1) { foo(it, ::Z) }
+    assertEquals(0, arr[0].x)
     return "OK"
 }
-

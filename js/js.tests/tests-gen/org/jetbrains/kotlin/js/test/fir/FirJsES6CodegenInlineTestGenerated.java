@@ -2445,6 +2445,77 @@ public class FirJsES6CodegenInlineTestGenerated extends AbstractFirJsES6CodegenI
   }
 
   @Nested
+  @TestMetadata("compiler/testData/codegen/boxInline/inline")
+  @TestDataPath("$PROJECT_ROOT")
+  @Tag("es6")
+  public class Inline {
+    @Test
+    public void testAllFilesPresentInInline() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/codegen/boxInline/inline"), Pattern.compile("^(.+)\\.kt$"), null, TargetBackend.JS_IR_ES6, true);
+    }
+
+    @Test
+    @TestMetadata("changingCapturedLocal.kt")
+    public void testChangingCapturedLocal() {
+      runTest("compiler/testData/codegen/boxInline/inline/changingCapturedLocal.kt");
+    }
+
+    @Test
+    @TestMetadata("correctOrderFunctionReference.kt")
+    public void testCorrectOrderFunctionReference() {
+      runTest("compiler/testData/codegen/boxInline/inline/correctOrderFunctionReference.kt");
+    }
+
+    @Test
+    @TestMetadata("crossModuleTypeOf.kt")
+    public void testCrossModuleTypeOf() {
+      runTest("compiler/testData/codegen/boxInline/inline/crossModuleTypeOf.kt");
+    }
+
+    @Test
+    @TestMetadata("crossinlineLambdaAllocation.kt")
+    public void testCrossinlineLambdaAllocation() {
+      runTest("compiler/testData/codegen/boxInline/inline/crossinlineLambdaAllocation.kt");
+    }
+
+    @Test
+    @TestMetadata("defaultArgs.kt")
+    public void testDefaultArgs() {
+      runTest("compiler/testData/codegen/boxInline/inline/defaultArgs.kt");
+    }
+
+    @Test
+    @TestMetadata("defaultArgsLowering.kt")
+    public void testDefaultArgsLowering() {
+      runTest("compiler/testData/codegen/boxInline/inline/defaultArgsLowering.kt");
+    }
+
+    @Test
+    @TestMetadata("defaultArgsMultipleModules.kt")
+    public void testDefaultArgsMultipleModules() {
+      runTest("compiler/testData/codegen/boxInline/inline/defaultArgsMultipleModules.kt");
+    }
+
+    @Test
+    @TestMetadata("genericFunctionReference.kt")
+    public void testGenericFunctionReference() {
+      runTest("compiler/testData/codegen/boxInline/inline/genericFunctionReference.kt");
+    }
+
+    @Test
+    @TestMetadata("inline0.kt")
+    public void testInline0() {
+      runTest("compiler/testData/codegen/boxInline/inline/inline0.kt");
+    }
+
+    @Test
+    @TestMetadata("inline1.kt")
+    public void testInline1() {
+      runTest("compiler/testData/codegen/boxInline/inline/inline1.kt");
+    }
+  }
+
+  @Nested
   @TestMetadata("compiler/testData/codegen/boxInline/inlineArgsInplace")
   @TestDataPath("$PROJECT_ROOT")
   @Tag("es6")

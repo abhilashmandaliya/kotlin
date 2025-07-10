@@ -2,7 +2,7 @@
 // IGNORE_NATIVE: cacheMode=STATIC_EVERYWHERE
 // IGNORE_NATIVE: cacheMode=STATIC_PER_FILE_EVERYWHERE
 // IGNORE_NATIVE: cacheMode=STATIC_USE_HEADERS_EVERYWHERE
-// MODULE: lib
+// NO_CHECK_LAMBDA_INLINING
 // FILE: lib.kt
 inline fun test(
     block: () -> String = {
@@ -13,6 +13,5 @@ inline fun test(
     }
 ) = block()
 
-// MODULE: main(lib)
 // FILE: main.kt
 fun box() = test()

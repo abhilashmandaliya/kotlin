@@ -9,9 +9,17 @@
 // IGNORE_BACKEND: JVM_IR
 // ^^^ KT-75642
 
+// IGNORE_BACKEND_MULTI_MODULE: JVM_IR, JVM_IR_SERIALIZE
+// IGNORE_BACKEND_K2_MULTI_MODULE: JVM_IR_SERIALIZE
+// ^^^ KT-79083 MainKt$box$$inlined$bar$1 cannot be cast to MainKt$box$$inlined$bar$2
+
+// FILE: lib.kt
+
 var counter = 0
 
 inline fun <T> runTwice(f: () -> T) = f() to f()
+
+// FILE: main.kt
 
 inline fun bar(crossinline test: () -> Int): Int {
     val x = runTwice {
