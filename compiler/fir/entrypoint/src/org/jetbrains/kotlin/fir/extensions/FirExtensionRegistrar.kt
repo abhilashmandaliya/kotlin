@@ -38,6 +38,7 @@ abstract class FirExtensionRegistrar : FirExtensionRegistrarAdapter() {
             FirAssignExpressionAltererExtension::class,
             FirScriptConfiguratorExtension::class,
             FirScriptResolutionConfigurationExtension::class,
+            FirScriptResolutionHacksExtension::class,
             Fir2IrScriptConfiguratorExtension::class,
             Fir2IrReplSnippetConfiguratorExtension::class,
             FirReplSnippetConfiguratorExtension::class,
@@ -57,7 +58,7 @@ abstract class FirExtensionRegistrar : FirExtensionRegistrarAdapter() {
 
     protected abstract fun ExtensionRegistrarContext.configurePlugin()
 
-    protected inner class ExtensionRegistrarContext {
+    inner class ExtensionRegistrarContext {
         // ------------------ factory methods ------------------
 
         @JvmName("plusStatusTransformerExtension")
@@ -113,6 +114,11 @@ abstract class FirExtensionRegistrar : FirExtensionRegistrarAdapter() {
         @JvmName("plusFirScriptResolutionConfigurationExtension")
         operator fun (FirScriptResolutionConfigurationExtension.Factory).unaryPlus() {
             registerExtension(FirScriptResolutionConfigurationExtension::class, this)
+        }
+
+        @JvmName("plusFirScriptResolutionHacksExtension")
+        operator fun (FirScriptResolutionHacksExtension.Factory).unaryPlus() {
+            registerExtension(FirScriptResolutionHacksExtension::class, this)
         }
 
         @JvmName("plusFir2IrScriptConfiguratorExtension")
@@ -207,6 +213,11 @@ abstract class FirExtensionRegistrar : FirExtensionRegistrarAdapter() {
         @JvmName("plusFirScriptResolutionConfigurationExtension")
         operator fun ((FirSession) -> FirScriptResolutionConfigurationExtension).unaryPlus() {
             FirScriptResolutionConfigurationExtension.Factory { this.invoke(it) }.unaryPlus()
+        }
+
+        @JvmName("plusFirScriptResolutionHacksExtension")
+        operator fun ((FirSession) -> FirScriptResolutionHacksExtension).unaryPlus() {
+            FirScriptResolutionHacksExtension.Factory { this.invoke(it) }.unaryPlus()
         }
 
         @JvmName("plusFir2IrScriptConfiguratorExtension")

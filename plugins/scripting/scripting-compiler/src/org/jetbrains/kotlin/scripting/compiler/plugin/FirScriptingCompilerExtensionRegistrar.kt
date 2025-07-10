@@ -7,12 +7,15 @@ package org.jetbrains.kotlin.scripting.compiler.plugin
 
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrar
+import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrar.ExtensionRegistrarContext
 import org.jetbrains.kotlin.scripting.compiler.plugin.services.Fir2IrScriptConfiguratorExtensionImpl
 import org.jetbrains.kotlin.scripting.compiler.plugin.services.FirScriptConfiguratorExtensionImpl
 import org.jetbrains.kotlin.scripting.compiler.plugin.services.FirScriptDefinitionProviderService
 import org.jetbrains.kotlin.scripting.compiler.plugin.services.FirScriptResolutionConfigurationExtensionImpl
 import org.jetbrains.kotlin.scripting.configuration.ScriptingConfigurationKeys
 import kotlin.script.experimental.host.ScriptingHostConfiguration
+import kotlin.script.experimental.host.ScriptingHostConfigurationKeys
+import kotlin.script.experimental.util.PropertiesCollection
 
 class FirScriptingCompilerExtensionRegistrar(
     private val hostConfiguration: ScriptingHostConfiguration, private val compilerConfiguration: CompilerConfiguration
@@ -31,5 +34,11 @@ class FirScriptingCompilerExtensionRegistrar(
         +FirScriptConfiguratorExtensionImpl.getFactory(hostConfiguration)
         +FirScriptResolutionConfigurationExtensionImpl.getFactory(hostConfiguration)
         +Fir2IrScriptConfiguratorExtensionImpl.getFactory(hostConfiguration)
+
+        hostConfiguration[ScriptingHostConfiguration.configureSessionExtensions]?.invoke(this, hostConfiguration)
     }
 }
+
+typealias ConfigureSessionExtensionsCallback = ExtensionRegistrarContext.(ScriptingHostConfiguration) -> Unit
+
+val ScriptingHostConfigurationKeys.configureSessionExtensions by PropertiesCollection.key<ConfigureSessionExtensionsCallback>(isTransient = true)
