@@ -62,10 +62,10 @@ class JvmCompilationOperationImpl(
 ) : BuildOperationImpl<CompilationResult>(), JvmCompilationOperation {
 
     init {
-        optionsDelegate["INCREMENTAL_COMPILATION"] = null
-        optionsDelegate["LOOKUP_TRACKER"] = null
-        optionsDelegate["SOURCE_TO_OUTPUTS_TRACKER"] = null
-        optionsDelegate["KOTLINSCRIPT_EXTENSIONS"] = null
+        this[INCREMENTAL_COMPILATION] = null
+        this[LOOKUP_TRACKER] = null
+        this[SOURCE_TO_OUTPUTS_TRACKER] = null
+        this[KOTLINSCRIPT_EXTENSIONS] = null
     }
 
     @UseFromImplModuleRestricted

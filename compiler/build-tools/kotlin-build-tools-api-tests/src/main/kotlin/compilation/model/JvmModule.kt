@@ -127,7 +127,6 @@ class JvmModule(
                 params,
                 options,
             )
-//            compilationConfigAction(compilationConfig)
         }, assertions)
     }
 
