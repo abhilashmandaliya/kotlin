@@ -39,12 +39,23 @@ sourceSets {
 }
 
 projectTest(parallel = true, jUnitMode = JUnitMode.JUnit5) {
-    dependsOn(":dist", dataframeRuntimeClasspath)
+    dependsOn(":dist")
     workingDir = rootDir
     useJUnitPlatform()
-    val localKotlinDataFramePluginClasspath: FileCollection = dataframeRuntimeClasspath
-    doFirst {
-        systemProperty("kotlin.dataframe.plugin.test.classpath", localKotlinDataFramePluginClasspath.asPath)
+    val classpathProvider = objects.newInstance<DataFramePluginClasspathProvider>()
+    classpathProvider.classpath.from(dataframeRuntimeClasspath)
+    jvmArgumentProviders.add(classpathProvider)
+}
+
+abstract class DataFramePluginClasspathProvider : CommandLineArgumentProvider {
+    @get:InputFiles
+    @get:Classpath
+    abstract val classpath: ConfigurableFileCollection
+
+    override fun asArguments(): Iterable<String> {
+        return listOf(
+            "-Dkotlin.dataframe.plugin.test.classpath=${classpath.asPath}"
+        )
     }
 }
 
