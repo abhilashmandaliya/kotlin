@@ -191,7 +191,6 @@ internal fun Project.registerKotlinPluginExtensions() {
             register(project, NativeVersionChecker)
             register(project, MultipleSourceSetRootsInCompilationChecker)
             register(project, SwiftExportModuleNameChecker)
-            register(project, CinteropCrossCompilationChecker)
         }
     }
 }
