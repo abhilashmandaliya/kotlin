@@ -18,6 +18,13 @@ FILE: enumConstructor.fir.kt
         }
 
         public final static enum entry ENTRY2: R|Enum1|
+        @R|kotlin/OptIn|(markerClass = vararg(<getClass>(Q|O|))) public final static enum entry ENTRY3: R|Enum1| = object : R|Enum1| {
+            private constructor(): R|<anonymous>| {
+                super<R|Enum1|>()
+            }
+
+        }
+
         public final static fun values(): R|kotlin/Array<Enum1>| {
         }
 
