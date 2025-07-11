@@ -28,6 +28,7 @@ internal val KotlinCreateNativeCInteropTasksSideEffect = KotlinCompilationSideEf
     val project = compilation.project
     val compilationInfo = KotlinCompilationInfo(compilation)
     compilation.cinterops.all { interop ->
+        println("Creating CInterop task for '${interop.name}' in compilation '${compilation.compilationName}' of target '${compilation.target.name}'")
         val params = CInteropProcess.Params(
             settings = interop,
             targetName = compilation.target.name,

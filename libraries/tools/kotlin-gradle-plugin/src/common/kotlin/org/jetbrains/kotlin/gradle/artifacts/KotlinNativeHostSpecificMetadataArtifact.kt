@@ -53,6 +53,7 @@ internal val KotlinNativeHostSpecificMetadataArtifact = KotlinTargetArtifact { t
         metadataJar.description = "Assembles Kotlin metadata of target '${target.name}'."
 
         val publishable = target.publishable
+        println("Host-specific metadata for target '${target.name}' is ${if (publishable) "publishable" else "not publishable"}")
         metadataJar.onlyIf { publishable }
 
         project.launch {
