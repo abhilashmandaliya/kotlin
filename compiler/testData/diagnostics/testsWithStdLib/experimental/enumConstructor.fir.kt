@@ -21,5 +21,16 @@ enum class Enum2 {
     }
 }
 
+enum class Enum3 @O constructor(x: Int = 42) {
+    ENTRY(),
+    ENTRY2,
+    ENTRY3<!OPT_IN_USAGE_ERROR!><!>(3);
+
+    val x: Int = x
+
+    @OptIn(O::class)
+    constructor() : this(0)
+}
+
 /* GENERATED_FIR_TAGS: annotationDeclaration, assignment, enumDeclaration, enumEntry, integerLiteral, primaryConstructor,
 propertyDeclaration, secondaryConstructor, thisExpression */
