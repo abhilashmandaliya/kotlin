@@ -47,7 +47,6 @@ internal val KotlinCreateNativeCompileTasksSideEffect = KotlinCompilationSideEff
 
         println("Native compilation task '${task.name}' for '${compilationInfo.compilationName}' enabled: $enabledOnCurrentHost")
         task.enabled = enabledOnCurrentHost
-        task.onlyIf { enabledOnCurrentHost }
 
         task.destinationDirectory.set(project.klibOutputDirectory(compilationInfo).dir("klib"))
         task.runViaBuildToolsApi.value(false).disallowChanges() // K/N is not yet supported

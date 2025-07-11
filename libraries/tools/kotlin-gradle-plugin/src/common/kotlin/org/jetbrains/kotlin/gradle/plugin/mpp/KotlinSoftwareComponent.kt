@@ -76,6 +76,8 @@ abstract class KotlinSoftwareComponent(
                     .map { component -> component.name }
                     .toSet()
 
+                println("Target '${target.name}' has publishable components: $targetPublishableComponentNames")
+
                 target.components.filter { it.name in targetPublishableComponentNames }
             }.toSet()
     }

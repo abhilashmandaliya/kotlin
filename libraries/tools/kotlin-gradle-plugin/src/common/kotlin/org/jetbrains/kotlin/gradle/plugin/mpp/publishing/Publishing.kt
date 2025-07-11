@@ -97,6 +97,7 @@ private fun createTargetPublications(project: Project, publishing: PublishingExt
         .withType(InternalKotlinTarget::class.java)
         .matching { it.publishable }
         .all { kotlinTarget ->
+            println("Creating target-specific publication for '${kotlinTarget.name}'")
             /** Publication for [KotlinMetadataTarget] is created in [createRootPublication] */
             if (kotlinTarget is KotlinMetadataTarget) return@all
             if (kotlinTarget is KotlinAndroidTarget)
