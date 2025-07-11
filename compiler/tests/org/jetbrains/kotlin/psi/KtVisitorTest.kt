@@ -45,16 +45,8 @@ class KtVisitorTest : KotlinTestWithEnvironment() {
         ktElement.accept(object : KtTreeVisitorVoid() {
             override fun visitElement(element: PsiElement) {
                 when (element) {
-                    is PsiComment -> {
-                        actualComments.add(element.text)
-                    }
                     is KtStringTemplateExpression -> {
                         insideStringConcatenation = true
-                    }
-                    is PsiWhiteSpace -> {
-                        if (insideStringConcatenation) {
-                            actualWhitespaceCount++
-                        }
                     }
                     is KtOperationReferenceExpression -> {
                         if (element.operationSignTokenType == org.jetbrains.kotlin.lexer.KtTokens.PLUS) {
@@ -64,6 +56,16 @@ class KtVisitorTest : KotlinTestWithEnvironment() {
                     else -> {
                         super.visitElement(element)
                     }
+                }
+            }
+
+            override fun visitComment(comment: PsiComment) {
+                actualComments.add(comment.text)
+            }
+
+            override fun visitWhiteSpace(space: PsiWhiteSpace) {
+                if (insideStringConcatenation) {
+                    actualWhitespaceCount++
                 }
             }
         })

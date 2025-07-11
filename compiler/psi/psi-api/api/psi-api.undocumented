@@ -1946,8 +1946,6 @@ org.jetbrains.kotlin.psi.psiUtil.textRange
 org.jetbrains.kotlin.psi.psiUtil.textRangeWithoutComments
 org.jetbrains.kotlin.psi.psiUtil.topParenthesizedParentOrMe()
 org.jetbrains.kotlin.psi.psiUtil.trimWhiteSpaces()
-org.jetbrains.kotlin.psi.psiUtil.tryFlattenStringConcatenationChildren()
-org.jetbrains.kotlin.psi.psiUtil.tryGetStringConcatenationArguments()
 org.jetbrains.kotlin.psi.psiUtil.unwrapNullability()
 org.jetbrains.kotlin.psi.psiUtil.unwrapParenthesesLabelsAndAnnotations()
 org.jetbrains.kotlin.psi.psiUtil.unwrapParenthesesLabelsAndAnnotationsDeeply()

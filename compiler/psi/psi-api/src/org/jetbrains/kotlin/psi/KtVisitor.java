@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static org.jetbrains.kotlin.psi.psiUtil.PsiUtilsKt.tryFlattenStringConcatenationChildren;
+import static org.jetbrains.kotlin.psi.psiUtil.PsiUtilsKt.tryFlattenStringConcatenationDescendants;
 
 public class KtVisitor<R, D> extends PsiElementVisitor {
     public R visitKtElement(@NotNull KtElement element, D data) {
@@ -231,13 +231,13 @@ public class KtVisitor<R, D> extends PsiElementVisitor {
      * you have to override this method and write the necessary logic there.
      */
     public R visitBinaryExpression(@NotNull KtBinaryExpression expression, D data) {
-        @Nullable List<PsiElement> flattenedStringConcatenationChildren = tryFlattenStringConcatenationChildren(expression);
+        @Nullable List<PsiElement> flattenedStringConcatenationChildren = tryFlattenStringConcatenationDescendants(expression);
         if (flattenedStringConcatenationChildren != null) {
             for (PsiElement childElement : flattenedStringConcatenationChildren) {
                 if (childElement instanceof KtElement) {
-                    visitKtElement((KtElement)childElement, data);
+                    ((KtElement) childElement).accept(this, data);
                 } else {
-                    visitElement(childElement);
+                    childElement.accept(this);
                 }
             }
 

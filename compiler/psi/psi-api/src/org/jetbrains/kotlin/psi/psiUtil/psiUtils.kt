@@ -46,13 +46,34 @@ import kotlin.contracts.contract
 
 // ----------- Walking children/siblings/parents -------------------------------------------------------------------------------------------
 
-fun KtBinaryExpression.tryFlattenStringConcatenationChildren(): List<PsiElement>? {
-    return tryVisitFoldingStringConcatenation(fullFidelity = true)
+/**
+ * Returns all descendants of the given @param[KtBinaryExpression] in flatten form if it's a concatenation expression
+ * with string literal arguments.
+ * Otherwise, returns `null`.
+ *
+ * For instance, for the expression `"a0" /* comment before plus */ + /* comment after plus */ "a1"`
+ * It returns `"a0"`, ws, /* comment before plus */, ws, `+`, ws, `/* comment after plus */`, ws, `"a1"`.
+ *
+ * @see [tryFlattenStringConcatenation] for more detail.
+ */
+@KtImplementationDetail
+fun KtBinaryExpression.tryFlattenStringConcatenationDescendants(): List<PsiElement>? {
+    return tryFlattenStringConcatenation(fullFidelity = true)
 }
 
-fun KtBinaryExpression.tryGetStringConcatenationArguments(): List<KtStringTemplateExpression>? {
+/**
+ * Returns arguments of the given @param[KtBinaryExpression] if it's a concatenation expression with string literal arguments.
+ * Otherwise, returns `null`.
+ *
+ * For instance, for the expression `"a0" /* comment before plus */ + /* comment after plus */ "a1"`
+ * It returns `"a0"`, `"a1"`.
+ *
+ * @see [tryFlattenStringConcatenation] for more detail.
+ */
+@KtImplementationDetail
+fun KtBinaryExpression.tryFlattenStringConcatenationArguments(): List<KtStringTemplateExpression>? {
     @Suppress("UNCHECKED_CAST")
-    return tryVisitFoldingStringConcatenation(fullFidelity = false) as? List<KtStringTemplateExpression>
+    return tryFlattenStringConcatenation(fullFidelity = false) as? List<KtStringTemplateExpression>
 }
 
 /**
@@ -77,11 +98,12 @@ fun KtBinaryExpression.tryGetStringConcatenationArguments(): List<KtStringTempla
  * But returns `'a', 'b', '+'(1), 'c', '+'(0)` and hidden tokens in between (whitespaces or comments) otherwise.
  * This is used when a full-fidelity tree structure is needed (see usages).
  */
-private fun KtBinaryExpression.tryVisitFoldingStringConcatenation(fullFidelity: Boolean): List<PsiElement>? {
+@KtImplementationDetail
+private fun KtBinaryExpression.tryFlattenStringConcatenation(fullFidelity: Boolean): List<PsiElement>? {
     // Optimization: don't allocate anything if the root expression doesn't match the string concatenation folding pattern
     if (operationToken != PLUS) return null
 
-    val input = mutableListOf<PsiElement>(this)
+    val input = mutableListOf<PsiElement>().also { it.add(this) }
     val output = ArrayDeque<PsiElement>()
 
     while (true) {

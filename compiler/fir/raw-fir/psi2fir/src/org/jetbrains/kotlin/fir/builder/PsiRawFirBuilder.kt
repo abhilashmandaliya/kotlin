@@ -3156,7 +3156,8 @@ open class PsiRawFirBuilder(
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression, data: FirElement?): FirElement {
-            val foldingStringConcatenationArguments = expression.tryGetStringConcatenationArguments()
+            @OptIn(KtImplementationDetail::class)
+            val foldingStringConcatenationArguments = expression.tryFlattenStringConcatenationArguments()
 
             return if (foldingStringConcatenationArguments != null) {
                 buildStringConcatenationCall {
