@@ -92,14 +92,25 @@ private fun MavenPublication.configureRootComponentForUklibPublication(
 
 private fun createTargetPublications(project: Project, publishing: PublishingExtension) {
     val kotlin = project.multiplatformExtension
+    project.launchInStage(KotlinPluginLifecycle.Stage.AfterEvaluateBuildscript) {
+        kotlin.targets
+            .withType(KotlinNativeTarget::class.java)
+            .matching { it.publishable }
+            .configureEach { kotlinTarget ->
+                println("Creating target-specific publication for Native target '${kotlinTarget.name}'")
+                kotlinTarget.createTargetSpecificMavenPublications(publishing.publications)
+            }
+    }
+
     // Enforce the order of creating the publications, since the metadata publication is used in the other publications:
     kotlin.targets
         .withType(InternalKotlinTarget::class.java)
-        .matching { it.publishable }
-        .all { kotlinTarget ->
+        .matching { it.publishable && it !is KotlinNativeTarget }
+        .configureEach { kotlinTarget ->
             println("Creating target-specific publication for '${kotlinTarget.name}'")
             /** Publication for [KotlinMetadataTarget] is created in [createRootPublication] */
-            if (kotlinTarget is KotlinMetadataTarget) return@all
+            if (kotlinTarget is KotlinMetadataTarget) return@configureEach
+            if (kotlinTarget is KotlinNativeTarget) return@configureEach
             if (kotlinTarget is KotlinAndroidTarget)
             // Android targets have their variants created in afterEvaluate; TODO handle this better?
                 project.whenEvaluated { kotlinTarget.createTargetSpecificMavenPublications(publishing.publications) }
